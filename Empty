@@ -54,3 +54,14 @@ public class LambdaInvoker {
         }
     }
 }
+
+
+package org.example;
+
+public class AwsLambdaFunction {
+
+    public String lambda(){
+        return "Hello world!";
+    }
+
+}
