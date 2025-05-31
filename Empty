@@ -1,1 +1,56 @@
 
+<dependencies>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>lambda</artifactId>
+            <version>2.25.28</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.11</version>
+        </dependency>
+    </dependencies>
+
+
+
+package org.example;
+
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.lambda.LambdaClient;
+import software.amazon.awssdk.services.lambda.model.InvokeRequest;
+import software.amazon.awssdk.services.lambda.model.InvokeResponse;
+
+public class LambdaInvoker {
+
+    public static void main(String[] args) {
+        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
+                "",
+                ""
+        );
+
+        Region region = Region.US_EAST_1;
+
+        try (LambdaClient lambdaClient = LambdaClient.builder()
+                .region(region)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+                .build()) {
+
+            String payload = "\"\"";
+
+            InvokeRequest request = InvokeRequest.builder()
+                    .functionName("")
+                    .payload(SdkBytes.fromUtf8String(payload))
+                    .build();
+
+            InvokeResponse response = lambdaClient.invoke(request);
+
+            String result = response.payload().asUtf8String();
+            System.out.println("Lambda Response: " + result);
+
+        }
+    }
+}
